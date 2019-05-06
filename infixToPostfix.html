@@ -1,0 +1,132 @@
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="author" content="colorlib.com" />
+	<link href="https://fonts.googleapis.com/css?family=Poppins:400,800" rel="stylesheet" />
+	<link href="css/main.css" rel="stylesheet" />
+</head>
+
+<body>
+	<div class="s006">
+		<form>
+			<fieldset>
+				<legend id="hasil">Selamat datang di kelompok kami</legend>
+				<div class="inner-form">
+					<div class="input-field">
+						<button class="btn-search" type="button">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+								<path
+									d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z">
+								</path>
+							</svg>
+						</button>
+						<input id="search" type="text" placeholder="silahkan ketik di sini" oninput="mainFunction()" />
+					</div>
+				</div>
+				<div class="suggestion-wrap">
+					<span id="span"></span>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+
+	<script>
+		let s = '';
+
+		function mainFunction() {
+			let data = document.getElementById('search').value;
+			let infixEx;
+			let postFixEx;
+			let result;
+			infixEx = data;
+			postFixEx = convertInfixToPostfix(data);
+			// result = evaluateInfixPosfix(postFixEx);
+			document.getElementById('hasil').innerHTML = postFixEx;
+
+
+
+
+		}
+
+		function convertInfixToPostfix(infix) {
+			let postfix = '';
+			let stack = [];
+			let ch;
+			for (i = 0; i <= infix.length; i++) {
+				ch = infix[i];
+
+				if (ch == '(') {
+					stack.push(ch);
+				} else if (ch == ')') {
+					while (!stack.empty() && stack.top() != '(') {
+						postfix = postfix + stack.top();
+						stack.pop();
+					}
+
+
+					if (!stack.empty() && stack.top() == '(') {
+						stack.top();
+					}
+				} else {
+					let priority = operator(ch);
+					if (priority == 0) {
+						if (ch == undefined) {
+							ch = '';
+						}
+						postfix = postfix + ch;
+						console.log(ch);
+					} else {
+						if (stack.empty) {
+							stack.push(ch);
+						} else {
+							while (stack != null && stack[stack.length - 1] != '(' && priority <= operator(stack[stack
+									.length - 1])) {
+								postfix = postfix + stack[stack.length - 1];
+								stack.pop();
+							}
+							stack.push(ch);
+						}
+					}
+				}
+
+			}
+
+			while (stack > 0) {
+				postfix += stack[stack.length - 1];
+				stack.pop();
+			}
+			return postfix + stack;
+		}
+		function calculate(a, b, operatorSign) {
+			if (operatorSign == '+') {
+				return a + b;
+			} else if (operatorSign == '-') {
+				return a - b;
+			} else if (operatorSign == '*') {
+				return a * b;
+			} else if (operatorSign == '/') {
+				return a / b;
+			} else if (operatorSign == '^') {
+				return pow(a, b);
+			}
+		}
+
+		function operator(ch) {
+			if (ch == '^') {
+				return 3;
+			} else if (ch == '/' || ch == '*') {
+				return 2;
+			} else if (ch == '+' || ch == '-') {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+	</script>
+</body>
+<!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+</html>
